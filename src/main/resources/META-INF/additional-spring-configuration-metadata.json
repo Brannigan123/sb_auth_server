@@ -1,0 +1,47 @@
+{"properties": [
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "JWT secret used for signing"
+  },
+  {
+    "name": "jwt.expiration",
+    "type": "java.lang.Long",
+    "description": "Expiration time for JWT token in ms"
+  },
+  {
+    "name": "jwt.refresh-expiration",
+    "type": "java.lang.Long",
+    "description": "Expiration time for JWT Refresh token in ms"
+  },
+  {
+    "name": "jwt.expired-refresh-token-purging-cron",
+    "type": "java.lang.String",
+    "description": "Cron expression for purging expired refresh tokens"
+  },
+  {
+    "name": "otp.length",
+    "type": "java.lang.Integer",
+    "description": "OTP code length"
+  },
+  {
+    "name": "otp.expiration",
+    "type": "java.lang.Long",
+    "description": "OTP code expiration time in ms"
+  },
+  {
+    "name": "otp.expired-otp-purging-cron",
+    "type": "java.lang.String",
+    "description": "Cron expression for purging expired OTP codes"
+  },
+  {
+    "name": "attribute-encryptor.algorithm",
+    "type": "java.lang.String",
+    "description": "Algorithm used for encrypting attribute values"
+  },
+  {
+    "name": "attribute-encryptor.secret",
+    "type": "java.lang.String",
+    "description": "Secret used to encrypt attribute values"
+  }
+]}

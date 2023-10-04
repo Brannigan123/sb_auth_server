@@ -1,0 +1,50 @@
+**/HELP.md
+**/target/
+!**/.mvn/wrapper/maven-wrapper.jar
+!**/**/src/main/**/target/
+!**/**/src/test/**/target/#
+**/Dockerfile
+**/docer-compose.yml
+**/nohup.out
+**/.DS_Store
+
+### Environment Variables ###
+**/*.env
+
+### STS ###
+**/.apt_generated
+**/.classpath
+**/.factorypath
+**/.project
+**/.settings
+**/.springBeans
+**/.sts4-cache
+
+### IntelliJ IDEA ###
+**/.idea
+**/*.iws
+**/*.iml
+**/*.ipr
+
+### NetBeans ###
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+**/build/
+!**/**/src/main/**/build/
+!**/**/src/test/**/build/
+
+### VS Code ###
+**/.vscode/
+
+### Application Configuration ###
+**/src/main/resources/application.properties
+
+**/k8-deployment.yaml
+**/minikube-deploy.sh
+**/docker-compose.yml
+
+### Custom jre ###
+project-jre/
