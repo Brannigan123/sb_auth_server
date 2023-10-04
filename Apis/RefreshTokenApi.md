@@ -9,7 +9,7 @@ All URIs are relative to *http://localhost*
 
 <a name="refeshToken"></a>
 # **refeshToken**
-> TokenRefreshResponse refeshToken(TokenRefreshRequest)
+> AuthResponse refeshToken(TokenRefreshRequest)
 
 
 
@@ -21,7 +21,7 @@ All URIs are relative to *http://localhost*
 
 ### Return type
 
-[**TokenRefreshResponse**](../Models/TokenRefreshResponse.md)
+[**AuthResponse**](../Models/AuthResponse.md)
 
 ### Authorization
 

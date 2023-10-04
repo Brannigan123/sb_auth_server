@@ -18,11 +18,8 @@ import org.springframework.stereotype.Service;
 import com.bran.service.auth.model.database.User;
 import com.bran.service.auth.model.mapper.OtpToOtpResponse;
 import com.bran.service.auth.model.mapper.SignupRequestToUser;
-import com.bran.service.auth.model.mapper.UserToSigninResponse;
-import com.bran.service.auth.model.mapper.UserToSignupResponse;
-import com.bran.service.auth.model.mapper.UserToTokenRefreshResponse;
-import com.bran.service.auth.model.mapper.UserToUserUpdateDetailsResponse;
-import com.bran.service.auth.model.payload.ApiResponse;
+import com.bran.service.auth.model.mapper.UserToAuthResponse;
+import com.bran.service.auth.model.mapper.UserToResponseUserDetails;
 import com.bran.service.auth.model.payload.request.EmailConfirmationOtpSubmitRequest;
 import com.bran.service.auth.model.payload.request.OtpRequest;
 import com.bran.service.auth.model.payload.request.SigninRequest;
@@ -31,10 +28,7 @@ import com.bran.service.auth.model.payload.request.SignupRequest;
 import com.bran.service.auth.model.payload.request.TokenRefreshRequest;
 import com.bran.service.auth.model.payload.request.UserDetailsUpdateRequest;
 import com.bran.service.auth.model.payload.response.OtpRequestResponse;
-import com.bran.service.auth.model.payload.response.SigninResponse;
-import com.bran.service.auth.model.payload.response.SignupResponse;
-import com.bran.service.auth.model.payload.response.TokenRefreshResponse;
-import com.bran.service.auth.model.payload.response.UserDetailsUpdateResponse;
+import com.bran.service.auth.model.payload.response.AuthResponse;
 import com.bran.service.auth.repository.UserRepository;
 
 import jakarta.mail.MessagingException;
@@ -65,15 +59,15 @@ public class AuthService {
      * @return the registration response with a token if successful, or an error
      *         response if there are validation errors
      */
-    public SignupResponse register(SignupRequest request) {
+    public AuthResponse register(SignupRequest request) {
         val errors = checkRegistrationRequest(request, new ArrayList<>());
         if (errors.isEmpty()) {
             val user = SignupRequestToUser.map(request, passwordEncoder);
             val createdUser = userRepository.save(user);
             val jwtAndRefreshToken = createJwtAndrefreshTokens(createdUser);
-            return UserToSignupResponse.map(createdUser, jwtAndRefreshToken.getLeft(), jwtAndRefreshToken.getRight());
+            return UserToAuthResponse.map(createdUser, jwtAndRefreshToken.getLeft(), jwtAndRefreshToken.getRight());
         }
-        return SignupResponse.builder().errored(true).messages(errors).build();
+        return AuthResponse.builder().errored(true).messages(errors).build();
     }
 
     /**
@@ -82,7 +76,7 @@ public class AuthService {
      * @param request the SigninRequest object containing the user's credentials
      * @return the SigninResponse object containing the authentication result
      */
-    public SigninResponse authenticate(SigninRequest request) {
+    public AuthResponse authenticate(SigninRequest request) {
         val errors = checkLoginRequest(request, new ArrayList<>());
         if (errors.isEmpty()) {
             val user = userRepository.findByEmailOrUsername(request.getEmailOrUsername());
@@ -93,7 +87,7 @@ public class AuthService {
                             new UsernamePasswordAuthenticationToken(matchedUser.getUsername(),
                                     request.getPassword()));
                     val jwtAndRefreshToken = createJwtAndrefreshTokens(matchedUser);
-                    return UserToSigninResponse.map(matchedUser, jwtAndRefreshToken.getLeft(),
+                    return UserToAuthResponse.map(matchedUser, jwtAndRefreshToken.getLeft(),
                             jwtAndRefreshToken.getRight());
                 } catch (Exception e) {
                     errors.add("Invalid credentials. Please try again or reset your password.");
@@ -102,7 +96,7 @@ public class AuthService {
                 errors.add("Invalid credentials. Please try again or reset your password.");
             }
         }
-        return SigninResponse.builder().errored(true).messages(errors).build();
+        return AuthResponse.builder().errored(true).messages(errors).build();
     }
 
     /**
@@ -111,7 +105,7 @@ public class AuthService {
      * @param request the token refresh request
      * @return the token refresh response
      */
-    public TokenRefreshResponse refreshToken(TokenRefreshRequest request) {
+    public AuthResponse refreshToken(TokenRefreshRequest request) {
         val errors = checkRefreshTokenRequest(request, new ArrayList<>());
         if (errors.isEmpty()) {
             val token = refreshTokenService.findByTokenString(request.getToken());
@@ -119,13 +113,13 @@ public class AuthService {
                 val user = token.get().getUser();
                 val jwtAndRefreshToken = createJwtAndrefreshTokens(user);
                 refreshTokenService.delete(token.get());
-                return UserToTokenRefreshResponse.map(user, jwtAndRefreshToken.getLeft(),
+                return UserToAuthResponse.map(user, jwtAndRefreshToken.getLeft(),
                         jwtAndRefreshToken.getRight());
             } else {
                 errors.add("Your session has expired. Please sign in again.");
             }
         }
-        return TokenRefreshResponse.builder().errored(true).messages(errors).build();
+        return AuthResponse.builder().errored(true).messages(errors).build();
     }
 
     /**
@@ -135,10 +129,10 @@ public class AuthService {
      * @return the API response indicating the success or failure of the signout
      *         operation
      */
-    public ApiResponse signout(SignoutRequest request) {
+    public AuthResponse signout(SignoutRequest request) {
         val usernameOptional = getLogedinUserUsername();
         if (usernameOptional.isEmpty()) {
-            return ApiResponse.builder().errored(true)
+            return AuthResponse.builder().errored(true)
                     .messages(List.of(YOU_ARE_NOT_SIGNED_IN_PLEASE_SIGN_IN_AND_TRY_AGAIN))
                     .build();
         }
@@ -147,20 +141,20 @@ public class AuthService {
         if (user.isPresent()) {
             if (request.getToken() == null) {
                 refreshTokenService.deleteByUser(user.get());
-                return ApiResponse.builder().errored(false)
+                return AuthResponse.builder().errored(false)
                         .messages(List.of("You have been signed out from all your devices."))
-                        .build();
+                        .build().withUserDetails(UserToResponseUserDetails.map(user.get()));
             } else {
                 val token = refreshTokenService.findByTokenString(request.getToken());
                 if (token.isPresent()) {
                     refreshTokenService.delete(token.get());
-                    return ApiResponse.builder().errored(false)
+                    return AuthResponse.builder().errored(false)
                             .messages(List.of("You have been signed out."))
-                            .build();
+                            .build().withUserDetails(UserToResponseUserDetails.map(user.get()));
                 }
             }
         }
-        return ApiResponse.builder().errored(true).messages(List.of(YOU_ARE_NOT_SIGNED_IN)).build();
+        return AuthResponse.builder().errored(true).messages(List.of(YOU_ARE_NOT_SIGNED_IN)).build();
     }
 
     public OtpRequestResponse sendEmailVerificationEmail() {
@@ -197,26 +191,26 @@ public class AuthService {
      *                OTP ID and the OTP code.
      * @return The ApiResponse object with the result of the validation.
      */
-    public ApiResponse valilidateEmailVerificationOtp(EmailConfirmationOtpSubmitRequest request) {
+    public AuthResponse valilidateEmailVerificationOtp(EmailConfirmationOtpSubmitRequest request) {
         val otpOptional = otpService.findById(request.getOtpId());
         if (otpOptional.isPresent()) {
             val otp = otpOptional.get();
             otpService.delete(otp);
             if (otp.getExpiryDate().before(new Date())) {
-                return ApiResponse.builder().errored(true).messages(List.of("OTP has expired. Please try again"))
+                return AuthResponse.builder().errored(true).messages(List.of("OTP has expired. Please try again"))
                         .build();
             }
             val user = otp.getUser();
             if (!user.isEmailVerified()) {
                 userRepository.save(user.withEmailVerified(true));
-                return ApiResponse.builder().errored(false).messages(List.of("Email verified."))
-                        .build();
+                return AuthResponse.builder().errored(false).messages(List.of("Email verified."))
+                        .build().withUserDetails(UserToResponseUserDetails.map(user));
             } else {
-                return ApiResponse.builder().errored(true).messages(List.of("Email already verified."))
+                return AuthResponse.builder().errored(true).messages(List.of("Email already verified."))
                         .build();
             }
         } else {
-            return ApiResponse.builder().errored(true).messages(List.of(INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN))
+            return AuthResponse.builder().errored(true).messages(List.of(INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN))
                     .build();
         }
     }
@@ -248,10 +242,10 @@ public class AuthService {
         }
     }
 
-    public UserDetailsUpdateResponse updateUserDetails(UserDetailsUpdateRequest request) {
+    public AuthResponse updateUserDetails(UserDetailsUpdateRequest request) {
         var usernameOptional = getLogedinUserUsername();
         if (usernameOptional.isEmpty()) {
-            return UserDetailsUpdateResponse.builder().errored(true)
+            return AuthResponse.builder().errored(true)
                     .messages(List.of(YOU_ARE_NOT_SIGNED_IN_PLEASE_SIGN_IN_AND_TRY_AGAIN))
                     .build();
         }
@@ -261,7 +255,7 @@ public class AuthService {
             val otp = otpOptional.get();
             otpService.delete(otp);
             if (otp.getExpiryDate().before(new Date())) {
-                return UserDetailsUpdateResponse.builder().errored(true)
+                return AuthResponse.builder().errored(true)
                         .messages(List.of("OTP has expired. Please try again"))
                         .build();
             }
@@ -270,15 +264,15 @@ public class AuthService {
                 updateUserFields(request, user);
                 val savedUser = userRepository.save(user);
                 val jwtAndRefreshToken = createJwtAndrefreshTokens(savedUser);
-                return UserToUserUpdateDetailsResponse.map(savedUser, jwtAndRefreshToken.getLeft(),
+                return UserToAuthResponse.map(savedUser, jwtAndRefreshToken.getLeft(),
                         jwtAndRefreshToken.getRight());
             } else {
-                return UserDetailsUpdateResponse.builder().errored(true)
+                return AuthResponse.builder().errored(true)
                         .messages(List.of(INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN))
                         .build();
             }
         } else {
-            return UserDetailsUpdateResponse.builder().errored(true)
+            return AuthResponse.builder().errored(true)
                     .messages(List.of(INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN))
                     .build();
         }

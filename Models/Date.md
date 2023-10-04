@@ -3,8 +3,8 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-| **seconds** | **Integer** |  | [optional] [default to null] |
 | **time** | **Long** |  | [optional] [default to null] |
+| **seconds** | **Integer** |  | [optional] [default to null] |
 | **date** | **Integer** |  | [optional] [default to null] |
 | **month** | **Integer** |  | [optional] [default to null] |
 | **hours** | **Integer** |  | [optional] [default to null] |

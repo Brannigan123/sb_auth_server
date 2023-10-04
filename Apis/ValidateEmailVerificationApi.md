@@ -9,7 +9,7 @@ All URIs are relative to *http://localhost*
 
 <a name="validateEmailVerification"></a>
 # **validateEmailVerification**
-> ApiResponse validateEmailVerification(EmailConfirmationOtpSubmitRequest)
+> AuthResponse validateEmailVerification(EmailConfirmationOtpSubmitRequest)
 
 
 
@@ -21,7 +21,7 @@ All URIs are relative to *http://localhost*
 
 ### Return type
 
-[**ApiResponse**](../Models/ApiResponse.md)
+[**AuthResponse**](../Models/AuthResponse.md)
 
 ### Authorization
 

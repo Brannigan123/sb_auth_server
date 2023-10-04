@@ -9,7 +9,7 @@ All URIs are relative to *http://localhost*
 
 <a name="authenticate"></a>
 # **authenticate**
-> SigninResponse authenticate(SigninRequest)
+> AuthResponse authenticate(SigninRequest)
 
 
 
@@ -21,7 +21,7 @@ All URIs are relative to *http://localhost*
 
 ### Return type
 
-[**SigninResponse**](../Models/SigninResponse.md)
+[**AuthResponse**](../Models/AuthResponse.md)
 
 ### Authorization
 

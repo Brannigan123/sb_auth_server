@@ -1,24 +1,20 @@
-package com.bran.service.auth.model.payload.response;
+package com.bran.service.auth.model.payload;
 
 import java.util.List;
 
 import com.bran.service.auth.model.database.Role;
-import com.bran.service.auth.model.payload.ApiResponse;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 @Data
-@SuperBuilder
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-public class UserDetailsUpdateResponse extends ApiResponse {
-    private String token;
-    private String refreshToken;
+public class ResponseUserDetails {
+    private String userId;
     private String username;
     private String displayName;
     private String email;

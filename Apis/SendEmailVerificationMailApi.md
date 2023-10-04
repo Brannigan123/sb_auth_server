@@ -9,7 +9,7 @@ All URIs are relative to *http://localhost*
 
 <a name="sendVerificationEmail"></a>
 # **sendVerificationEmail**
-> ApiResponse sendVerificationEmail()
+> OtpRequestResponse sendVerificationEmail()
 
 
 
@@ -18,7 +18,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**ApiResponse**](../Models/ApiResponse.md)
+[**OtpRequestResponse**](../Models/OtpRequestResponse.md)
 
 ### Authorization
 

@@ -9,7 +9,7 @@ All URIs are relative to *http://localhost*
 
 <a name="register"></a>
 # **register**
-> SignupResponse register(SignupRequest)
+> AuthResponse register(SignupRequest)
 
 
 
@@ -21,7 +21,7 @@ All URIs are relative to *http://localhost*
 
 ### Return type
 
-[**SignupResponse**](../Models/SignupResponse.md)
+[**AuthResponse**](../Models/AuthResponse.md)
 
 ### Authorization
 

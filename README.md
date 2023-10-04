@@ -20,20 +20,18 @@ All URIs are relative to *http://localhost*
 <a name="documentation-for-models"></a>
 ## Documentation for Models
 
- - [ApiResponse](./Models/ApiResponse.md)
+ - [AuthResponse](./Models/AuthResponse.md)
  - [Date](./Models/Date.md)
  - [EmailConfirmationOtpSubmitRequest](./Models/EmailConfirmationOtpSubmitRequest.md)
  - [OtpRequest](./Models/OtpRequest.md)
  - [OtpRequestResponse](./Models/OtpRequestResponse.md)
  - [Permission](./Models/Permission.md)
+ - [ResponseUserDetails](./Models/ResponseUserDetails.md)
  - [Role](./Models/Role.md)
  - [SigninRequest](./Models/SigninRequest.md)
- - [SigninResponse](./Models/SigninResponse.md)
  - [SignoutRequest](./Models/SignoutRequest.md)
  - [SignupRequest](./Models/SignupRequest.md)
- - [SignupResponse](./Models/SignupResponse.md)
  - [TokenRefreshRequest](./Models/TokenRefreshRequest.md)
- - [TokenRefreshResponse](./Models/TokenRefreshResponse.md)
  - [UserDetailsUpdateRequest](./Models/UserDetailsUpdateRequest.md)
 
 

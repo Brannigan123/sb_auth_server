@@ -9,7 +9,7 @@ All URIs are relative to *http://localhost*
 
 <a name="updateUserDetails"></a>
 # **updateUserDetails**
-> ApiResponse updateUserDetails(UserDetailsUpdateRequest)
+> AuthResponse updateUserDetails(UserDetailsUpdateRequest)
 
 
 
@@ -21,7 +21,7 @@ All URIs are relative to *http://localhost*
 
 ### Return type
 
-[**ApiResponse**](../Models/ApiResponse.md)
+[**AuthResponse**](../Models/AuthResponse.md)
 
 ### Authorization
 
