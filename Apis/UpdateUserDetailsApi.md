@@ -25,7 +25,7 @@ All URIs are relative to *http://localhost*
 
 ### Authorization
 
-No authorization required
+[Authentication](../README.md#Authentication)
 
 ### HTTP request headers
 

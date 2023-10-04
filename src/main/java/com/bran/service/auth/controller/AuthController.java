@@ -18,12 +18,17 @@ import com.bran.service.auth.model.payload.response.TokenRefreshResponse;
 import com.bran.service.auth.service.AuthService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@SecurityScheme(type = SecuritySchemeType.HTTP, name = "Authentication", scheme = "bearer", bearerFormat = "JWT", in = SecuritySchemeIn.HEADER)
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -48,12 +53,14 @@ public class AuthController {
         return ResponseEntity.ok(authService.refreshToken(request));
     }
 
+    @SecurityRequirement(name = "Authentication")
     @Tag(name = "Signout", description = "Sign out a user")
     @PostMapping(value = "/authenticated/logout")
     public ResponseEntity<ApiResponse> signout(@RequestBody SignoutRequest request) {
         return ResponseEntity.ok(authService.signout(request));
     }
 
+    @SecurityRequirement(name = "Authentication")
     @Tag(name = "Send email verification mail", description = "Send an email verification mail with OTP")
     @PostMapping(value = "/authenticated/send-email-verification-mail")
     public ResponseEntity<ApiResponse> sendVerificationEmail() {
@@ -67,12 +74,13 @@ public class AuthController {
         return ResponseEntity.ok(authService.valilidateEmailVerificationOtp(request));
     }
 
-    @Tag(name = "Send custom email verification", description = "Send an email verification mail with OTP with custom message")
+    @Tag(name = "Send custom email verification", description = "Send an email verification mail with OTP and custom message")
     @PostMapping(value = "/public/request-otp")
-    public ResponseEntity<OtpRequestResponse> postMethodName(@RequestBody OtpRequest request) {
+    public ResponseEntity<OtpRequestResponse> requestOtp(@RequestBody OtpRequest request) {
         return ResponseEntity.ok(authService.requestOTP(request));
     }
 
+    @SecurityRequirement(name = "Authentication")
     @Tag(name = "Update user details", description = "Update user details, requires OTP verification")
     @PostMapping(value = "/authenticated/update-user-details")
     public ResponseEntity<ApiResponse> updateUserDetails(@RequestBody UserDetailsUpdateRequest request) {

@@ -4,12 +4,12 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**postMethodName**](SendCustomEmailVerificationApi.md#postMethodName) | **POST** /api/v1/auth/public/request-otp |  |
+| [**requestOtp**](SendCustomEmailVerificationApi.md#requestOtp) | **POST** /api/v1/auth/public/request-otp |  |
 
 
-<a name="postMethodName"></a>
-# **postMethodName**
-> OtpRequestResponse postMethodName(OtpRequest)
+<a name="requestOtp"></a>
+# **requestOtp**
+> OtpRequestResponse requestOtp(OtpRequest)
 
 
 

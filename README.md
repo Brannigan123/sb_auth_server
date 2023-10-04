@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 | *AuthenticateApi* | [**authenticate**](Apis/AuthenticateApi.md#authenticate) | **POST** /api/v1/auth/public/authenticate |  |
 | *RefreshTokenApi* | [**refeshToken**](Apis/RefreshTokenApi.md#refeshtoken) | **POST** /api/v1/auth/public/refresh-token |  |
 | *RegisterApi* | [**register**](Apis/RegisterApi.md#register) | **POST** /api/v1/auth/public/register |  |
-| *SendCustomEmailVerificationApi* | [**postMethodName**](Apis/SendCustomEmailVerificationApi.md#postmethodname) | **POST** /api/v1/auth/public/request-otp |  |
+| *SendCustomEmailVerificationApi* | [**requestOtp**](Apis/SendCustomEmailVerificationApi.md#requestotp) | **POST** /api/v1/auth/public/request-otp |  |
 | *SendEmailVerificationMailApi* | [**sendVerificationEmail**](Apis/SendEmailVerificationMailApi.md#sendverificationemail) | **POST** /api/v1/auth/authenticated/send-email-verification-mail |  |
 | *SignoutApi* | [**signout**](Apis/SignoutApi.md#signout) | **POST** /api/v1/auth/authenticated/logout |  |
 | *UpdateUserDetailsApi* | [**updateUserDetails**](Apis/UpdateUserDetailsApi.md#updateuserdetails) | **POST** /api/v1/auth/authenticated/update-user-details |  |
@@ -40,4 +40,8 @@ All URIs are relative to *http://localhost*
 <a name="documentation-for-authorization"></a>
 ## Documentation for Authorization
 
-All endpoints do not require authorization.
+<a name="Authentication"></a>
+### Authentication
+
+- **Type**: HTTP Bearer Token authentication (JWT)
+

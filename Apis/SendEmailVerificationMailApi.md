@@ -22,7 +22,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[Authentication](../README.md#Authentication)
 
 ### HTTP request headers
 
