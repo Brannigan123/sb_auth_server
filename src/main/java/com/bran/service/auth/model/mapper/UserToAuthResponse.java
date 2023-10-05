@@ -21,7 +21,6 @@ public class UserToAuthResponse {
     public static AuthResponse map(final User user, final String jwt, final String refreshToken) {
         return AuthResponse.builder().token(jwt)
                 .refreshToken(refreshToken).userDetails(UserToResponseUserDetails.map(user)).errored(false)
-                .messages(List.of("User details updated."))
                 .build();
     }
 }
