@@ -1,7 +1,5 @@
 package com.bran.service.auth.model.mapper;
 
-import java.util.List;
-
 import com.bran.service.auth.model.database.User;
 import com.bran.service.auth.model.payload.response.AuthResponse;
 
