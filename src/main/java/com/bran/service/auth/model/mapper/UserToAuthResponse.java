@@ -1,5 +1,7 @@
 package com.bran.service.auth.model.mapper;
 
+import java.util.List;
+
 import com.bran.service.auth.model.database.User;
 import com.bran.service.auth.model.payload.response.AuthResponse;
 
@@ -16,9 +18,11 @@ public class UserToAuthResponse {
      * @param refreshToken the refresh token
      * @return the UserDetailsUpdateResponse object with the mapped values
      */
-    public static AuthResponse map(final User user, final String jwt, final String refreshToken) {
+    public static AuthResponse map(final User user, final String jwt, final String refreshToken,
+            final String... messages) {
         return AuthResponse.builder().token(jwt)
                 .refreshToken(refreshToken).userDetails(UserToResponseUserDetails.map(user)).errored(false)
+                .messages(List.of(messages))
                 .build();
     }
 }
