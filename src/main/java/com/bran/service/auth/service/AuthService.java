@@ -84,7 +84,7 @@ public class AuthService {
                 val matchedUser = user.get();
                 try {
                     authenticationManager.authenticate(
-                            new UsernamePasswordAuthenticationToken(matchedUser.getUsername(),
+                            new UsernamePasswordAuthenticationToken(matchedUser.getId(),
                                     request.getPassword()));
                     val jwtAndRefreshToken = createJwtAndrefreshTokens(matchedUser);
                     return UserToAuthResponse.map(matchedUser, jwtAndRefreshToken.getLeft(),
@@ -130,14 +130,14 @@ public class AuthService {
      *         operation
      */
     public AuthResponse signout(SignoutRequest request) {
-        val usernameOptional = getLogedinUserUsername();
-        if (usernameOptional.isEmpty()) {
+        val userIdOptional = getLogedinUserId();
+        if (userIdOptional.isEmpty()) {
             return AuthResponse.builder().errored(true)
                     .messages(List.of(YOU_ARE_NOT_SIGNED_IN_PLEASE_SIGN_IN_AND_TRY_AGAIN))
                     .build();
         }
-        val username = usernameOptional.get();
-        val user = userRepository.findByUsername(username);
+        val userId = userIdOptional.get();
+        val user = userRepository.findById(userId);
         if (user.isPresent()) {
             if (request.getToken() == null) {
                 refreshTokenService.deleteByUser(user.get());
@@ -157,15 +157,21 @@ public class AuthService {
         return AuthResponse.builder().errored(true).messages(List.of(YOU_ARE_NOT_SIGNED_IN)).build();
     }
 
+    /**
+     * Sends an email verification email to the logged-in user.
+     *
+     * @return an OtpRequestResponse object representing the result of sending the
+     *         email verification email
+     */
     public OtpRequestResponse sendEmailVerificationEmail() {
-        val usernameOptional = getLogedinUserUsername();
-        if (usernameOptional.isEmpty()) {
+        val userIdOptional = getLogedinUserId();
+        if (userIdOptional.isEmpty()) {
             return OtpRequestResponse.builder().errored(true)
                     .messages(List.of(YOU_ARE_NOT_SIGNED_IN_PLEASE_SIGN_IN_AND_TRY_AGAIN))
                     .build();
         }
-        val username = usernameOptional.get();
-        val userOptional = userRepository.findByUsername(username);
+        val userId = userIdOptional.get();
+        val userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             val user = userOptional.get();
             val otp = otpService.createOTP(user);
@@ -174,6 +180,7 @@ public class AuthService {
                         "Use the code to verify your email.");
                 return OtpToOtpResponse.map(user, otp);
             } catch (Exception e) {
+                e.printStackTrace();
                 return OtpRequestResponse.builder().errored(true)
                         .messages(List.of("Error sending verification email. Please try again later."))
                         .build();
@@ -243,13 +250,13 @@ public class AuthService {
     }
 
     public AuthResponse updateUserDetails(UserDetailsUpdateRequest request) {
-        var usernameOptional = getLogedinUserUsername();
-        if (usernameOptional.isEmpty()) {
+        var useIdOptional = getLogedinUserId();
+        if (useIdOptional.isEmpty()) {
             return AuthResponse.builder().errored(true)
                     .messages(List.of(YOU_ARE_NOT_SIGNED_IN_PLEASE_SIGN_IN_AND_TRY_AGAIN))
                     .build();
         }
-        val username = usernameOptional.get();
+        val userId = useIdOptional.get();
         val otpOptional = otpService.findById(request.getOtpId());
         if (otpOptional.isPresent()) {
             val otp = otpOptional.get();
@@ -260,7 +267,7 @@ public class AuthService {
                         .build();
             }
             val user = otp.getUser();
-            if (user.getUsername().equals(username)) {
+            if (user.getId().equals(userId)) {
                 updateUserFields(request, user);
                 val savedUser = userRepository.save(user);
                 val jwtAndRefreshToken = createJwtAndrefreshTokens(savedUser);
@@ -298,12 +305,12 @@ public class AuthService {
     }
 
     /**
-     * Retrieves the username of the logged-in user.
+     * Retrieves the user id of the logged-in user.
      *
-     * @return an Optional containing the username of the logged-in user, or an
+     * @return an Optional containing the user id of the logged-in user, or an
      *         empty Optional if the user is not logged in.
      */
-    public Optional<String> getLogedinUserUsername() {
+    public Optional<String> getLogedinUserId() {
         val authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return Optional.empty();

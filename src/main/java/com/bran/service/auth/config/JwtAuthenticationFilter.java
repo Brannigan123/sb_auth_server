@@ -84,7 +84,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     private void updateSecurityContext(HttpServletRequest request, final User user) {
         val authenticationToken = new UsernamePasswordAuthenticationToken(
-                user.getUsername(), null, user.getPermissions());
+                user.getId(), null, user.getPermissions());
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }

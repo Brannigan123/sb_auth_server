@@ -7,8 +7,9 @@ import java.util.Optional;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.bran.service.auth.model.database.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -49,8 +50,8 @@ public class JwtService {
      * @param userDetails the user details object representing the user
      * @return true if the token claims are valid, false otherwise
      */
-    public boolean isTokenClaimsValid(Claims claims, UserDetails userDetails) {
-        return claims.getSubject().equals(userDetails.getUsername()) && !claims.getExpiration().before(new Date());
+    public boolean isTokenClaimsValid(Claims claims, User userDetails) {
+        return claims.getSubject().equals(userDetails.getId()) && !claims.getExpiration().before(new Date());
     }
 
     /**
@@ -59,7 +60,7 @@ public class JwtService {
      * @param userDetails the user details used to generate the token
      * @return the generated token
      */
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User userDetails) {
         return generateToken(userDetails, Map.of());
     }
 
@@ -70,8 +71,8 @@ public class JwtService {
      * @param claims      the claims to be included in the token
      * @return the generated token
      */
-    public String generateToken(UserDetails userDetails, Map<String, Object> claims) {
-        return Jwts.builder().setClaims(claims).setSubject(userDetails.getUsername())
+    public String generateToken(User userDetails, Map<String, Object> claims) {
+        return Jwts.builder().setClaims(claims).setSubject(userDetails.getId())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
