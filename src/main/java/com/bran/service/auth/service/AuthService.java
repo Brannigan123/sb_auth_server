@@ -209,9 +209,9 @@ public class AuthService {
             }
             val user = otp.getUser();
             if (!user.isEmailVerified()) {
-                userRepository.save(user.withEmailVerified(true));
+                val updatedUser = userRepository.save(user.withEmailVerified(true));
                 return AuthResponse.builder().errored(false).messages(List.of("Email verified."))
-                        .build().withUserDetails(UserToResponseUserDetails.map(user));
+                        .build().withUserDetails(UserToResponseUserDetails.map(updatedUser));
             } else {
                 return AuthResponse.builder().errored(true).messages(List.of("Email already verified."))
                         .build();
