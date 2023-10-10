@@ -1,15 +1,15 @@
-# ValidateEmailVerificationApi
+# ValidateEmailVerificationWithOtpApi
 
 All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**validateEmailVerification**](ValidateEmailVerificationApi.md#validateEmailVerification) | **POST** /api/v1/auth/public/validate-email-verification |  |
+| [**valilidateEmailVerificationOtp**](ValidateEmailVerificationWithOtpApi.md#valilidateEmailVerificationOtp) | **POST** /api/v1/auth/public/validate-email-verification-otp |  |
 
 
-<a name="validateEmailVerification"></a>
-# **validateEmailVerification**
-> AuthResponse validateEmailVerification(EmailConfirmationOtpSubmitRequest)
+<a name="valilidateEmailVerificationOtp"></a>
+# **valilidateEmailVerificationOtp**
+> AuthResponse valilidateEmailVerificationOtp(EmailConfirmationOtpSubmitRequest)
 
 
 

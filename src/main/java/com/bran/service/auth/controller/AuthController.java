@@ -64,14 +64,14 @@ public class AuthController {
         return ResponseEntity.ok(authService.sendEmailVerificationEmail());
     }
 
-    @Tag(name = "Validate email verification", description = "Validate an email verification OTP")
-    @PostMapping(value = "/public/validate-email-verification")
-    public ResponseEntity<AuthResponse> validateEmailVerification(
+    @Tag(name = "Validate email verification with otp", description = "Validate an email verification OTP")
+    @PostMapping(value = "/public/validate-email-verification-otp")
+    public ResponseEntity<AuthResponse> valilidateEmailVerificationOtp(
             @RequestBody EmailConfirmationOtpSubmitRequest request) {
         return ResponseEntity.ok(authService.valilidateEmailVerificationOtp(request));
     }
 
-    @Tag(name = "Send custom email verification", description = "Send an email verification mail with OTP and custom message")
+    @Tag(name = "Send custom email verification", description = "Send an email with OTP and custom message")
     @PostMapping(value = "/public/request-otp")
     public ResponseEntity<OtpRequestResponse> requestOtp(@RequestBody OtpRequest request) {
         return ResponseEntity.ok(authService.requestOTP(request));

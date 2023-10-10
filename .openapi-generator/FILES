@@ -5,7 +5,7 @@ Apis/SendCustomEmailVerificationApi.md
 Apis/SendEmailVerificationMailApi.md
 Apis/SignoutApi.md
 Apis/UpdateUserDetailsApi.md
-Apis/ValidateEmailVerificationApi.md
+Apis/ValidateEmailVerificationWithOtpApi.md
 Models/AuthResponse.md
 Models/Date.md
 Models/EmailConfirmationOtpSubmitRequest.md
