@@ -39,9 +39,8 @@ import lombok.val;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private static final String OTP_HAS_EXPIRED_PLEASE_TRY_AGAIN = "OTP has expired. Please try again";
     private static final String YOU_ARE_NOT_SIGNED_IN_PLEASE_SIGN_IN_AND_TRY_AGAIN = "You are not signed in. Please sign in and try again.";
-    private static final String INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN = "Invalid OTP or expired. Please try again";
+    private static final String INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN = "Invalid or expired OTP. Please try again";
     private static final String YOU_ARE_NOT_SIGNED_IN = "You are not signed in.";
 
     private static final Pattern EMAIL_REGEX_PATTERN = Pattern
@@ -205,23 +204,21 @@ public class AuthService {
         if (otpOptional.isPresent()) {
             val otp = otpOptional.get();
             otpService.delete(otp);
-            if (otp.getExpiryDate().before(new Date())) {
-                return AuthResponse.builder().errored(true).messages(List.of(OTP_HAS_EXPIRED_PLEASE_TRY_AGAIN))
-                        .build();
+            if (otp.getCode().equals(request.getCode()) && otp.getExpiryDate().after(new Date())) {
+                val user = otp.getUser();
+                if (!user.isEmailVerified()) {
+                    val updatedUser = userRepository.save(user.withEmailVerified(true));
+                    return AuthResponse.builder().errored(false).messages(List.of("Email verified."))
+                            .build().withUserDetails(UserToResponseUserDetails.map(updatedUser));
+                } else {
+                    return AuthResponse.builder().errored(true).messages(List.of("Email already verified."))
+                            .build();
+                }
             }
-            val user = otp.getUser();
-            if (!user.isEmailVerified()) {
-                val updatedUser = userRepository.save(user.withEmailVerified(true));
-                return AuthResponse.builder().errored(false).messages(List.of("Email verified."))
-                        .build().withUserDetails(UserToResponseUserDetails.map(updatedUser));
-            } else {
-                return AuthResponse.builder().errored(true).messages(List.of("Email already verified."))
-                        .build();
-            }
-        } else {
-            return AuthResponse.builder().errored(true).messages(List.of(INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN))
-                    .build();
         }
+        return AuthResponse.builder().errored(true).messages(List.of(INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN))
+                .build();
+
     }
 
     /**
@@ -263,13 +260,9 @@ public class AuthService {
         if (otpOptional.isPresent()) {
             val otp = otpOptional.get();
             otpService.delete(otp);
-            if (otp.getExpiryDate().before(new Date())) {
-                return AuthResponse.builder().errored(true)
-                        .messages(List.of(OTP_HAS_EXPIRED_PLEASE_TRY_AGAIN))
-                        .build();
-            }
             val user = otp.getUser();
-            if (user.getId().equals(userId)) {
+            if (user.getId().equals(userId) && otp.getCode().equals(request.getOtpCode())
+                    && otp.getExpiryDate().after(new Date())) {
                 updateUserFields(request, user);
                 if (!user.isEmailVerified()) {
                     user.setEmailVerified(true);
@@ -278,16 +271,11 @@ public class AuthService {
                 val jwtAndRefreshToken = createJwtAndrefreshTokens(updatedUser);
                 return UserToAuthResponse.map(updatedUser, jwtAndRefreshToken.getLeft(),
                         jwtAndRefreshToken.getRight());
-            } else {
-                return AuthResponse.builder().errored(true)
-                        .messages(List.of(INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN))
-                        .build();
             }
-        } else {
-            return AuthResponse.builder().errored(true)
-                    .messages(List.of(INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN))
-                    .build();
         }
+        return AuthResponse.builder().errored(true)
+                .messages(List.of(INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN))
+                .build();
     }
 
     /**
@@ -301,29 +289,22 @@ public class AuthService {
         if (otpOptional.isPresent()) {
             val otp = otpOptional.get();
             otpService.delete(otp);
-            if (otp.getExpiryDate().before(new Date())) {
-                return AuthResponse.builder().errored(true).messages(List.of(OTP_HAS_EXPIRED_PLEASE_TRY_AGAIN))
-                        .build();
+            val user = otp.getUser();
+            if ((user.getEmail().equals(request.getEmailOrUsername())
+                    || user.getUsername().equals(request.getEmailOrUsername()))
+                    && otp.getCode().equals(request.getOtpCode()) && otp.getExpiryDate().after(new Date())) {
+                if (!user.isEmailVerified()) {
+                    user.setEmailVerified(true);
+                }
+                user.setPassword(passwordEncoder.encode(request.getPassword()));
+                val updatedUser = userRepository.save(user);
+                val jwtAndRefreshToken = createJwtAndrefreshTokens(updatedUser);
+                return UserToAuthResponse.map(updatedUser, jwtAndRefreshToken.getLeft(),
+                        jwtAndRefreshToken.getRight());
             }
-            var user = otp.getUser();
-            if (!(user.getEmail().equals(request.getEmailOrUsername())
-                    || user.getUsername().equals(request.getEmailOrUsername()))) {
-                return AuthResponse.builder().errored(true)
-                        .messages(List.of("Provided combination of OTP and email/username is invalid."))
-                        .build();
-            }
-            if (!user.isEmailVerified()) {
-                user.setEmailVerified(true);
-            }
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
-            val updatedUser = userRepository.save(user);
-            val jwtAndRefreshToken = createJwtAndrefreshTokens(updatedUser);
-            return UserToAuthResponse.map(updatedUser, jwtAndRefreshToken.getLeft(),
-                    jwtAndRefreshToken.getRight());
-        } else {
-            return AuthResponse.builder().errored(true).messages(List.of(INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN))
-                    .build();
         }
+        return AuthResponse.builder().errored(true).messages(List.of(INVALID_OTP_OR_EXPIRED_PLEASE_TRY_AGAIN))
+                .build();
     }
 
     /**

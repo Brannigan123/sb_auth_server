@@ -12,6 +12,7 @@ Models/EmailConfirmationOtpSubmitRequest.md
 Models/OtpRequest.md
 Models/OtpRequestResponse.md
 Models/Permission.md
+Models/ResetUserPasswordRequest.md
 Models/ResponseUserDetails.md
 Models/Role.md
 Models/SigninRequest.md
