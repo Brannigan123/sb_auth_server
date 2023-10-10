@@ -1,4 +1,4 @@
-package com.bran.service.auth;
+package com.bran;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.bran.service.auth;
+package com.bran;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
