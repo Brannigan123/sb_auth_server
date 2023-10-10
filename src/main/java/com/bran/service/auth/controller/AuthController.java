@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bran.service.auth.model.payload.request.EmailConfirmationOtpSubmitRequest;
 import com.bran.service.auth.model.payload.request.OtpRequest;
+import com.bran.service.auth.model.payload.request.ResetUserPasswordRequest;
 import com.bran.service.auth.model.payload.request.SigninRequest;
 import com.bran.service.auth.model.payload.request.SignoutRequest;
 import com.bran.service.auth.model.payload.request.SignupRequest;
@@ -82,6 +83,12 @@ public class AuthController {
     @PostMapping(value = "/authenticated/update-user-details")
     public ResponseEntity<AuthResponse> updateUserDetails(@RequestBody UserDetailsUpdateRequest request) {
         return ResponseEntity.ok(authService.updateUserDetails(request));
+    }
+
+    @Tag(name = "Update user details", description = "Update user details, requires OTP verification")
+    @PostMapping(value = "/public/reset-password")
+    public ResponseEntity<AuthResponse> resetUserPassword(@RequestBody ResetUserPasswordRequest request) {
+        return ResponseEntity.ok(authService.resetUserPassword(request));
     }
 
 }
