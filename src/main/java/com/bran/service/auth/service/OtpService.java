@@ -88,7 +88,7 @@ public class OtpService {
         helper.setFrom("brannigansakwah@gmail.com", "Bran from gmail 😜");
         helper.setTo(user.getEmail());
 
-        val minutes = Duration.between(new Date().toInstant(), otp.getExpiryDate().toInstant()).toMinutes() - 1;
+        val minutes = Duration.between(new Date().toInstant(), otp.getExpiryDate().toInstant()).toMinutes();
         val subject = String.format("Here's your One Time Password (OTP) - Expire in %d minutes!", minutes);
         helper.setSubject(subject);
 
