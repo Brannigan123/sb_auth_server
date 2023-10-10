@@ -315,13 +315,13 @@ public class AuthService {
      * @param user    the User object to be updated
      */
     private void updateUserFields(UserDetailsUpdateRequest request, final User user) {
-        if (request.getDisplayName() != null) {
+        if (request.getDisplayName() != null || !request.getDisplayName().isEmpty()) {
             user.setDisplayName(request.getDisplayName());
         }
-        if (request.getEmail() != null) {
+        if (request.getEmail() != null || !request.getEmail().isEmpty()) {
             user.setEmail(request.getEmail());
         }
-        if (request.getPassword() != null) {
+        if (request.getPassword() != null || !request.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
     }
