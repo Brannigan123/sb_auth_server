@@ -7,6 +7,10 @@ else
   SPEC_PATH="$1"
 fi
 
+# Remove preexisting markdown docs
+rm -rf Apis/*
+rm -rf Models/*
+
 # Generate markdown documentation from OpenAPI spec
 openapi-generator generate \
 -g markdown \
