@@ -10,11 +10,11 @@ All URIs are relative to *http://localhost*
 | *AuthenticateApi* | [**authenticate**](Apis/AuthenticateApi.md#authenticate) | **POST** /api/v1/auth/public/authenticate |  |
 | *RefreshTokenApi* | [**refeshToken**](Apis/RefreshTokenApi.md#refeshtoken) | **POST** /api/v1/auth/public/refresh-token |  |
 | *RegisterApi* | [**register**](Apis/RegisterApi.md#register) | **POST** /api/v1/auth/public/register |  |
+| *ResetUserPasswordApi* | [**resetUserPassword**](Apis/ResetUserPasswordApi.md#resetuserpassword) | **POST** /api/v1/auth/public/reset-password |  |
 | *SendCustomEmailVerificationApi* | [**requestOtp**](Apis/SendCustomEmailVerificationApi.md#requestotp) | **POST** /api/v1/auth/public/request-otp |  |
 | *SendEmailVerificationMailApi* | [**sendVerificationEmail**](Apis/SendEmailVerificationMailApi.md#sendverificationemail) | **POST** /api/v1/auth/authenticated/send-email-verification-mail |  |
 | *SignoutApi* | [**signout**](Apis/SignoutApi.md#signout) | **POST** /api/v1/auth/authenticated/logout |  |
-| *UpdateUserDetailsApi* | [**resetUserPassword**](Apis/UpdateUserDetailsApi.md#resetuserpassword) | **POST** /api/v1/auth/public/reset-password |  |
-*UpdateUserDetailsApi* | [**updateUserDetails**](Apis/UpdateUserDetailsApi.md#updateuserdetails) | **POST** /api/v1/auth/authenticated/update-user-details |  |
+| *UpdateUserDetailsApi* | [**updateUserDetails**](Apis/UpdateUserDetailsApi.md#updateuserdetails) | **POST** /api/v1/auth/authenticated/update-user-details |  |
 | *ValidateEmailVerificationWithOtpApi* | [**valilidateEmailVerificationOtp**](Apis/ValidateEmailVerificationWithOtpApi.md#valilidateemailverificationotp) | **POST** /api/v1/auth/public/validate-email-verification-otp |  |
 
 

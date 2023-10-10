@@ -85,7 +85,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.updateUserDetails(request));
     }
 
-    @Tag(name = "Update user details", description = "Update user details, requires OTP verification")
+    @Tag(name = "Reset user password", description = "Update user details, requires OTP verification")
     @PostMapping(value = "/public/reset-password")
     public ResponseEntity<AuthResponse> resetUserPassword(@RequestBody ResetUserPasswordRequest request) {
         return ResponseEntity.ok(authService.resetUserPassword(request));

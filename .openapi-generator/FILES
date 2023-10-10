@@ -1,6 +1,7 @@
 Apis/AuthenticateApi.md
 Apis/RefreshTokenApi.md
 Apis/RegisterApi.md
+Apis/ResetUserPasswordApi.md
 Apis/SendCustomEmailVerificationApi.md
 Apis/SendEmailVerificationMailApi.md
 Apis/SignoutApi.md
