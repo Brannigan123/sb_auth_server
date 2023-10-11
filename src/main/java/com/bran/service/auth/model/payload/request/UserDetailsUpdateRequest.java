@@ -16,5 +16,6 @@ public class UserDetailsUpdateRequest {
     private String otpCode;
     private String displayName;
     private String email;
+    private String avatarUrl;
     private String password;
 }

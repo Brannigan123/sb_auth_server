@@ -48,6 +48,8 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     @Convert(converter = AttributeEncryptor.class)
     private String email;
+    @Convert(converter = AttributeEncryptor.class)
+    private String avatarUrl;
     @Column(nullable = false)
     private String password;
     @Builder.Default

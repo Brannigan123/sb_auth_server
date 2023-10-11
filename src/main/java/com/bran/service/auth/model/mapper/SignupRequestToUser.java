@@ -24,7 +24,7 @@ public class SignupRequestToUser {
                 .displayName(request.getDisplayName() == null || request.getDisplayName().isBlank()
                         ? request.getUsername()
                         : request.getDisplayName())
-                .email(request.getEmail())
+                .email(request.getEmail()).avatarUrl(request.getAvatarUrl())
                 .password(passwordEncoder.encode(request.getPassword())).roles(List.of(Role.USER.asNewDbRole()))
                 .emailVerified(false).lockedAccount(false).deletedAccount(false).build();
     }

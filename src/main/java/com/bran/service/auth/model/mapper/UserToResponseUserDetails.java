@@ -17,6 +17,7 @@ public class UserToResponseUserDetails {
         return ResponseUserDetails.builder().userId(user.getId())
                 .username(user.getUsername()).displayName(user.getDisplayName())
                 .email(user.getEmail()).roles(user.getRoles())
+                .avatarUrl(user.getAvatarUrl())
                 .emailVerified(user.isEmailVerified())
                 .lockedAccount(user.isLockedAccount())
                 .deletedAccount(user.isDeletedAccount())

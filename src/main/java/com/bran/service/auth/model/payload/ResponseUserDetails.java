@@ -19,6 +19,7 @@ public class ResponseUserDetails {
     private String userId;
     private String username;
     private String displayName;
+    private String avatarUrl;
     private String email;
     private List<Role> roles;
     private boolean emailVerified;
