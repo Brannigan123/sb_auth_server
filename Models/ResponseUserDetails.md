@@ -6,6 +6,7 @@
 | **userId** | **String** |  | [optional] [default to null] |
 | **username** | **String** |  | [optional] [default to null] |
 | **displayName** | **String** |  | [optional] [default to null] |
+| **avatarUrl** | **String** |  | [optional] [default to null] |
 | **email** | **String** |  | [optional] [default to null] |
 | **roles** | [**List**](Role.md) |  | [optional] [default to null] |
 | **emailVerified** | **Boolean** |  | [optional] [default to null] |
